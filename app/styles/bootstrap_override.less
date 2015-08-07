@@ -1,0 +1,293 @@
+/*font helper class*/
+.sw-light {
+  font-family: @sw-light;
+}
+
+.sw-bold {
+  font-family: @sw-bold;
+}
+
+.sw-regular {
+  font-family: @sw-regular;
+}
+
+/*Header styles*/
+h1, .h1 {
+  font-weight: 300;
+  line-height: 1.5;
+  color: #000;
+}
+
+h2, .h2 {
+  text-transform: uppercase;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #000;
+}
+
+h3, .h3 {
+  font-weight: 300;
+  line-height: 1.5;
+  color: #000;
+}
+
+h4, .h4 {
+  font-weight: 700;
+  color: #000;
+  line-height: 1.5;
+}
+
+.page-header {
+  margin: 30px 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+/*p {
+  font-family: @sw-light;
+  font-size: @font-size-large;
+}*/
+
+/*--end style override--*/
+
+.caret-sw {
+  .caret();
+  color: @brand-primary;
+}
+
+.caret-sw-left {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-right: 4px dashed;
+  border-right: 4px solid \9;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  color: @brand-primary;
+}
+
+/*Experimental code to remove border/outline for links & buttons*/
+.btn, a{
+  &:focus {
+    outline: 0 !important;
+  }
+}
+
+input::-moz-focus-inner, button::-moz-focus-inner {
+  border:0;
+}
+
+.input-lg {
+  font-size:16px;
+}
+
+/*Custom button size. Default border-radius etc., are used for lot of elements
+  Hence, using our own here.
+*/
+/*@border-radius-large-sw:40px;
+@border-radius-sw: 16px;
+.btn-sw {
+  border-radius: @border-radius-sw;
+}
+.btn-lg-sw {
+  border-radius: @border-radius-large-sw;
+}*/
+
+@btn-padding-base-vertical: 10px;
+@btn-padding-base-horizontal: 22px;
+@btn-padding-large-vertical: 18px;
+@btn-padding-large-horizontal: 30px;
+
+.btn {
+  border-width: 2px;
+  &:active {
+    position:relative;
+    top: 1px;
+  }
+  .button-size(@btn-padding-base-vertical; @btn-padding-base-horizontal; @font-size-base; @line-height-base; @btn-border-radius-base);
+}
+
+.btn-lg {
+  .button-size(@btn-padding-large-vertical; @btn-padding-large-horizontal; @font-size-large; @line-height-large; @btn-border-radius-large);
+}
+
+.btn-default {
+  &:hover, &:active {
+    background-color:#f3f3f3;
+    background-color:#f3f3f3;
+  }
+}
+
+.btn-primary {
+  &:hover, &:active {
+    background-color: #752d6d;
+    border-color: #752d6d;
+  }
+}
+
+.btn-fb-sw {
+  .button-variant(@btn-primary-color; @btn-fb-bg; darken(@btn-fb-bg, 5%));
+  /*.btn-sw-gradient(@btn-primary-color; @btn-fb-bg);*/
+}
+
+.btn-imgonly-sw {
+  padding: 6px;
+  line-height: 1;
+  font-size: 10px;
+}
+
+.btn-green-sw {
+  color: #359A34;
+  border-color: #359A34;
+}
+
+/*Ref: https://gist.github.com/claviska/6117193*/
+.btn-sw-gradient(@color, @background, @text-shadow: none) {
+
+	color: @color;
+	#gradient > .vertical(lighten(@background, 5%), darken(@background, 5%), 0%, 100%);
+	border-color: darken(@background, 10%);
+	border-bottom-color: darken(@background, 20%);
+	text-shadow: @text-shadow;
+	.box-shadow(inset 0 1px 0 rgba(255, 255, 255, .1));
+
+	&:hover,
+	&:focus,
+	&:active,
+	&.active {
+		#gradient > .vertical(darken(@background, 0), darken(@background, 10%), 0%, 100%);
+		border-color: darken(@background, 20%);
+		color: @color;
+	}
+
+	&.disabled,
+	&[disabled],
+	fieldset[disabled] & {
+		&,
+		&:hover,
+		&:focus,
+		&:active,
+		&.active {
+			background-color: @background;
+			border-color: darken(@background, 5%);
+		}
+	}
+}
+
+/*Extend buttons to have gradient effect*/
+/*.btn-danger-sw {
+  .btn-sw-gradient(@btn-danger-color; @btn-danger-bg);
+}
+
+.btn-primary-sw {
+  .btn-sw-gradient(@btn-primary-color; @btn-primary-bg);
+}*/
+
+.btn-link-sw-gray {
+    .btn-link();
+    color: @gray-light;
+}
+
+.navbar {
+  border: none;
+}
+.navbar-brand {
+  /*correct padding to center align based on image height ~40px*/
+  padding: ((@navbar-height - 40px) / 2) @navbar-padding-horizontal;
+}
+
+.navbar-btn{
+  /*Padding looks very large in mobile. Let's apply only to desktop*/
+  .navbar-vertical-align(44px);
+}
+
+/*Make drop-down menu more thumb friendly*/
+.dropdown-menu li a  {
+  padding: 5px 10px !important;
+}
+
+.text-sm-gray {
+    color: @gray-light;
+    font-size: 10px;
+}
+
+.list-group-sw {
+  .list-group();
+
+  .list-group-item {
+    border-left: none;
+    border-right: none;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.selected{
+      font-weight: bold;
+    }
+  }
+}
+
+/* list without top border for first item and
+   without bottom border for last item.
+   Used in wallet card page.
+*/
+.list-group-sw2 {
+  .list-group();
+
+  .list-group-item {
+    border-left: none;
+    border-right: none;
+    padding: 10px 0px 10px 0px;
+
+    &:last-child {
+      border-bottom: none;
+      padding-top:10px;
+      padding-bottom:0px;
+    }
+
+    &:first-child {
+      border-top: none;
+      padding-top: 0px;
+      padding-bottom: 10px;
+    }
+  }
+}
+
+.nav-body {
+  @media (min-width: @screen-md-min) {
+    border-left: 1px solid #ddd;
+    .box-shadow(-2px 0 5px -2px #ddd);
+  }
+  padding-bottom: 50px;
+}
+
+/* custom css for radio buttons */
+input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+input[type="radio"] + label {
+  position: relative;
+  padding: 0 0 0 20px;
+}
+
+input[type="radio"] + label:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  height: 14px;
+  width: 14px;
+  background: white;
+  border: 1px solid gray;
+  box-shadow: inset 0px 0px 0px 2px white;
+  border-radius: 50%;
+}
+
+input[type="radio"]:checked + label:before {
+  background: @brand-primary;
+}

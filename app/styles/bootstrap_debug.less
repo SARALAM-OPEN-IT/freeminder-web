@@ -1,0 +1,125 @@
+@screen-xs-min:     480px;
+@screen-sm-min:     768px;
+@screen-md-min:     992px;
+@screen-lg-min:     1200px;
+
+@color-xs: #967ADC;
+@color-sm: #F6BB42;
+@color-md: #3BAFDA;
+@color-lg: #37BC9B;
+
+@color-row:#CCD1D9;
+@color-highlight: #8CC152;
+
+.container {
+	opacity: 0.7;
+}
+
+.debug-output{
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 1px;
+  font-size: 13px;
+  font-style: italic;
+  font-family: Roboto, Helvetica, sans-serif;
+  white-space: nowrap;
+  font-weight: bold;
+  z-index:2001;
+}
+
+body:before:extend(.debug-output) {
+	position:fixed;
+	z-index:2000;
+	color: #fff;
+}
+
+[class*="col-"] {	
+	&:after {
+		&:extend(.debug-output);
+		min-width: 50px;
+	}
+	
+	&:before {
+		&:extend(.debug-output);
+		right: 51px;
+		
+	}
+}
+
+[class*="col-"]:hover {
+  opacity: 1;
+  box-shadow: 0 0 15px @color-highlight;
+  border: 2px solid @color-highlight;
+}
+
+.row {
+	border: 3px dashed @color-row;
+	&:hover{
+		border: 3px dashed @color-highlight;	
+	}
+}
+
+
+.debug(@type, @color, @col: 0) when (@col <= 12) {
+	@common: {
+		background-color:@@color;
+		color: #fff;
+	};
+
+	.col-@{type}-@{col} {
+		border: 2px inset @@color;
+		&:after {
+			content: "\00a0 @{type}-@{col} \00a0";
+			@common();
+		}
+	}
+	
+	.col-@{type}-offset-@{col}:before {
+		content: "\00a0 @{type}-offset-@{col} \00a0";
+		@common();
+	}
+	.col-@{type}-push-@{col}:before {
+		content: "\00a0 @{type}-push-@{col} \00a0";
+		@common();
+	}
+	.col-@{type}-pull-@{col}:before {
+		content: "\00a0 @{type}-pull-@{col} \00a0";
+		@common();
+	}
+	
+	.debug(@type, @color, (@col + 1));
+}
+
+@media (min-width: @screen-xs-min) {
+	.debug(xs; color-xs);
+	body:before:extend(.debug-output) {
+		content: "\00a0 phone (xs) \00a0";
+		background-color: @color-xs;
+	}
+}
+
+@media (min-width: @screen-sm-min) {
+	.debug(sm; color-sm);
+	body:before {
+    	content: "\00a0 tablet (sm) \00a0";
+		background-color: @color-sm;
+  	}
+}
+
+@media (min-width: @screen-md-min) {
+	.debug(md; color-md);
+	body:before {
+    	content: "\00a0 desktop (md) \00a0";
+		background-color: @color-md;
+  	}
+}
+
+@media (min-width: @screen-lg-min) {
+	.debug(lg; color-lg);
+	body:before {
+    	content: "\00a0 large screen (lg) \00a0";
+		background-color: @color-lg;
+  	}
+}
+
