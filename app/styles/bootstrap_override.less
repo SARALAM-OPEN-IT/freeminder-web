@@ -175,6 +175,79 @@ input::-moz-focus-inner, button::-moz-focus-inner {
 	}
 }
 
+.btn-status(@color) {
+    &,
+		&:hover,
+		&:focus,
+    &.focus,
+    &:link,
+    &:visited,
+		&:active,
+		&.active,
+    &:active:focus,
+		&.active:focus {
+      background-color:@color !important;
+      border-color:@color !important;
+      display: inline-block;
+      width: 70px;
+  }
+}
+
+.btn-status-unread {
+  .btn-status(rgb(221, 222, 224));
+  &, &:hover, &:active {
+    color:inherit !important;
+  }
+}
+
+.btn-status-sent {
+  .btn-status(rgb(221, 222, 224));
+  &, &:hover, &:active {
+    color:inherit !important;
+  }
+}
+
+.btn-status-resend {
+  .btn-status(rgb(221, 222, 224));
+  &, &:hover, &:active {
+    color:inherit !important;
+  }
+}
+
+.btn-status-seen {
+  .btn-status(rgb(244, 205, 3));
+}
+
+.btn-status-claimed {
+  .btn-status(rgb(165, 191, 26));
+}
+
+.btn-status-nostatus {
+  .btn-status(#fff);
+}
+
+.btn-status-thanksSent {
+  .btn-status(#8f3a84);
+}
+
+.msg-button-list {
+  background-color:#f2f2f2;
+  button:extend(.btn, .btn-default) {
+    margin-bottom: 10px;
+    width:150px;
+  }
+}
+
+.msg-filter {
+  margin-bottom:30px;
+    @media (max-width: @screen-xs-max) {
+      select {
+        margin-bottom:10px;
+        .make-xs-column(12); 
+      }
+    }  
+}
+
 /*Extend buttons to have gradient effect*/
 /*.btn-danger-sw {
   .btn-sw-gradient(@btn-danger-color; @btn-danger-bg);
@@ -290,4 +363,19 @@ input[type="radio"] + label:before {
 
 input[type="radio"]:checked + label:before {
   background: @brand-primary;
+}
+
+.msg-right-down {
+  .glyphicon;
+  .glyphicon-chevron-down;
+  color: #8f3a84;
+  @media (max-width: @screen-xs-max) {
+    padding-top:36px;
+  }
+}
+
+.collapsed .msg-right-down {
+  .glyphicon;
+  .glyphicon-chevron-right;
+  color: inherit;
 }

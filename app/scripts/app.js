@@ -63,17 +63,20 @@ angular
       .when('/customer-list', {
         templateUrl: 'views/customer-list.html',
         controller: 'CustomerListCtrl',
-        controllerAs: 'customerList'
+        controllerAs: 'customerList',
+        requireLogin: true
       })
       .when('/edit-contact', {
         templateUrl: 'views/edit-contact.html',
         controller: 'EditContactCtrl',
-        controllerAs: 'editContact'
+        controllerAs: 'editContact',
+        requireLogin: true
       })
       .when('/import-file', {
         templateUrl: 'views/import-file.html',
         controller: 'ImportFileCtrl',
-        controllerAs: 'importFile'
+        controllerAs: 'importFile',
+        requireLogin: true
       })
       .when('/add-action', {
         templateUrl: 'views/add-action.html',
@@ -83,9 +86,54 @@ angular
       .when('/new-contact', {
         templateUrl: 'views/new-contact.html',
         controller: 'NewContactCtrl',
-        controllerAs: 'newContact'
+        controllerAs: 'newContact',
+        requireLogin: true
       })
       .otherwise({
         redirectTo: '/'
       });
-  }]);
+  }]).run(   ['$rootScope', '$location', '$injector', '$log', 'userService', 'Parse',
+     function($rootScope ,  $location ,  $injector , $log  , userService , Parse) {
+
+      $rootScope.storedRoute = {returnToNext:{}, returnToUrl:''};
+
+      // gets called whenever route changes
+      $rootScope.$on('$routeChangeStart', function(event, next, current) {
+
+
+
+        // handle plain redirects, which doesn't require remembering initial route
+        if (next && next.dependencyRedirect) {
+          var dest = next.dependencyRedirect($injector);
+          if (dest) {
+            $location.path(dest);
+            return;
+          }
+        }
+
+        // if requires login, remember route and take to login page
+        if (next && next.requireLogin && !userService.isLoggedIn() ) {
+
+          $rootScope.storedRoute.returnToNext = next;
+          $rootScope.storedRoute.returnToUrl = $location.url();
+          $location.path('/login');
+          return;
+        }
+        // after successful login, if remember route exists, take to remembered route
+        else if (current && next &&
+                 next.originalPath !== current.originalPath &&
+                 userService.isLoggedIn() ) {
+
+          // if remember route exists
+          if ( $rootScope.storedRoute.returnToUrl.length ) {
+            var redirectTo = $rootScope.storedRoute.returnToUrl;
+            $rootScope.storedRoute.returnToNext = {};
+            $rootScope.storedRoute.returnToUrl = '';
+            $location.path(redirectTo);
+            return;
+          }
+        }
+
+      });
+    }
+  ]);
