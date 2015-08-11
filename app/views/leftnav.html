@@ -1,0 +1,14 @@
+<div class="col-md-2 hidden-xs hidden-sm left-nav">
+  <div data-ng-controller="LeftnavCtrl">
+    <br/><br/>
+    <profilepic data-isloggedin="{{isLoggedIn}}" data-leftnav="'true'" data-profilepic="{{image}}" data-initials="{{initials}}"></profilepic>
+    <div class="text-center">Hi&nbsp;<span ng-bind="name"></span>!</div>
+    <br/>
+    <ul class="list-group-sw">
+      <li class="list-group-item" ng-class="(page === 'profile' ? 'selected' : '')"><a class="left-nav-anchor" href="#/profile">My Profile</a></li>
+      <li class="list-group-item" ng-class="(page === 'wallet' ? 'selected' : '')"><a class="left-nav-anchor" href="#/wallet/no-cache">My Wallet</a></li>
+      <li class="list-group-item" ng-class="(page === 'transactions' ? 'selected' : '')"><a class="left-nav-anchor" href="#/transactions">My Transactions</a></li>
+      <li class="list-group-item"><a class="left-nav-anchor" href="" data-ng-click="signout()">Log Out</a></li>
+    </ul>
+  </div>
+</div>
