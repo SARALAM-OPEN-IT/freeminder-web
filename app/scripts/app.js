@@ -89,6 +89,16 @@ angular
         controllerAs: 'newContact',
         requireLogin: true
       })
+      .when('/profile', {
+        templateUrl: 'views/profile.html',
+        controller: 'ProfileCtrl',
+        controllerAs: 'profile'
+      })
+      .when('/leftnav', {
+        templateUrl: 'views/leftnav.html',
+        controller: 'LeftnavCtrl',
+        controllerAs: 'leftnav'
+      })
       .otherwise({
         redirectTo: '/'
       });

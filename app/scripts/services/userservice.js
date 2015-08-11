@@ -597,23 +597,28 @@ angular.module('freeminderApp')
       
       
     function _getCustomerList(handleSuccess, handleError) {
-      var cachedCatalogData;
+     
+       var ret = _defResult(), d = $q.defer();
+        
       if (!user.isLoggedIn) {
         handleError('User not logged in..');
         return;
       }
+        
     
-      if(customerList.length != 0) {
+      if(customerList.length !== 0) {
           handleSuccess("success");
           return;
-          
-          
+
       }
+        
+      $timeout(function() {
+        d.notify('Fetching contacts..');
+      }, 0);
          
       var o = {
         'parentId': user.oID
-      
-       
+    
       };
 
       //send ajax form submission
@@ -641,7 +646,7 @@ angular.module('freeminderApp')
           
       });
 
-    };
+    }
       
       
     function _saveContact(objectId, parentId, email, mobile, username, service_name, actions) {
@@ -693,16 +698,16 @@ angular.module('freeminderApp')
                 
                 var dom, service, frequency;
                 console.log('saving action ..' + action.objectId);
-                if(action.dom.id == 0) {
+                if(action.dom.id === 0) {
                     dom = '1';
                 }
                 
-                if(action.service.id == 0 ) {
+                if(action.service.id === 0 ) {
                     
                     service = 'OTHER SUBSCRIPTIONS';
                 }
                 
-                if(action.frequency.id == 0) {
+                if(action.frequency.id === 0) {
                     frequency = 'monthly';   
                 }
                 
@@ -722,8 +727,9 @@ angular.module('freeminderApp')
                     'runonsave' : 'false'
                     
                 };
-                console.log(a);
+               console.log(a);
                Parse.save({api: 'saveAction'}, a).$promise.then(function(data){
+                   $log.debug('after save action' + JSON.stringify(data));
                    
                }).catch(function(r){
                    console.log('Unable save action'+ r.data);

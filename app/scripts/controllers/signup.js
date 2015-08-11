@@ -14,7 +14,7 @@ angular.module('freeminderApp')
     $scope.errMsg = '';
     $scope.lPromise = null;
     $scope.lMessage = '';
-    $scope.recaptchaKey = '';
+
         
      $scope.service_list = [
       {id:1, name:'Service', },
@@ -42,7 +42,7 @@ angular.module('freeminderApp')
 
     /*Simple signup flow*/
     //Widget callback and store widget ID
-    var captchaID = 0;
+  
 
     $scope.submitForm = function() {
       //clear the error message first

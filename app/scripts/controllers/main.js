@@ -8,10 +8,17 @@
  * Controller of the freeminderApp
  */
 angular.module('freeminderApp')
-  .controller('MainCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
+  .controller('MainCtrl', ['$scope', '$log', 'configuration', function ($scope, $log, config) {
+
+  var handleError = function () {
+    // TODO: Error messaging
+    // console.log('Get EMP catalog failed');
+  };
+
+  var handleSuccess = function (data) {
+
+  };
+
+  //catalogService.getData(handleSuccess, handleError);
+      
+}]);
