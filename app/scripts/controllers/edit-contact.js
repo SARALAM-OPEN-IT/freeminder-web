@@ -173,9 +173,7 @@ angular.module('freeminderApp')
       }, function(s) {
         $scope.lMessage = s;
       }).finally(function() {
-        //google recaptcha causes input element
-        //in IE not to display any updated text.
-        //setting focus() seems to fix this issue
+ 
        
       });
         

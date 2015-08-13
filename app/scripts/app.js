@@ -99,6 +99,17 @@ angular
         controller: 'LeftnavCtrl',
         controllerAs: 'leftnav'
       })
+      .when('/system-action', {
+        templateUrl: 'views/system-action.html',
+        controller: 'SystemActionCtrl',
+        controllerAs: 'systemAction',
+        requireLogin: true
+      })
+      .when('/sysaction-list', {
+        templateUrl: 'views/sysaction-list.html',
+        controller: 'SysactionListCtrl',
+        controllerAs: 'sysactionList'
+      })
       .otherwise({
         redirectTo: '/'
       });

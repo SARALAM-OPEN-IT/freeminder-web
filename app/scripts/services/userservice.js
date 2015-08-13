@@ -35,6 +35,7 @@ angular.module('freeminderApp')
       
       
         var customerList = [];
+        var systemActionList = [];
         var selectedContact = {};
 
     function ObjResult(sts, code, swCode, msg) {
@@ -981,6 +982,144 @@ angular.module('freeminderApp')
           //always return deferred object
           return d.promise;
     }
+      
+      
+    function _saveSysAction (objectId, parentId, actions) {
+        
+        var parentId = parentId || '';
+        var ret = _defResult(), d = $q.defer();
+
+        //Basic validation
+        if(!parentId.length ) { //|| !parentId.length) {
+            ret.msg = 'Invalid Input!';
+            //reject via timeout for indicator to receive rejection
+            $timeout(function() {
+              d.reject(ret);
+            }, 0);
+            return d.promise;
+        }
+
+        //Perform email & mobile validation
+        $timeout(function() {
+            d.notify('Saving Action.. ');
+        },0);
+
+
+        actions.forEach(function(action) {
+
+            var dom, service, frequency;
+            console.log('saving action ..' + action.objectId);
+            if(action.dom.id === 0) {
+                    dom = '1';
+            }
+
+            if(action.service.id === 0 ) {
+
+                service = 'OTHER SUBSCRIPTIONS';
+             }
+
+            if(action.frequency.id === 0) {
+                frequency = 'monthly';   
+            }
+
+            var a = {
+                'objectId' : action.objectId,
+                'parentId' : parentId,
+                'name' : action.action_name,
+                'email' : action.action_email ? 'true' : 'false',
+                'sms' : action.action_sms ? 'true' : 'false',
+                'voice' : action.action_voice ? 'true' : 'false',
+                'action_text': action.action_text,
+                'start': action.start,
+                'end': action.end,
+                'service' : action.service.name,
+                'dom' : action.dom.name,
+                'frequency' : action.frequency.name,
+                'runonsave' : 'false'
+
+            };
+            console.log(a);
+            Parse.save({api: 'saveAction'}, a).$promise.then(function(data){
+                $log.debug('after save action' + JSON.stringify(data));
+                
+                systemActionList.push(data.result.action);
+
+            }).catch(function(r){
+                console.log('Unable save action'+ r.data);
+
+            });
+        });
+
+        ret.sts = true;
+        d.resolve(user);
+
+
+        //always return deferred object
+        return d.promise;
+
+
+        
+        
+    }
+      
+      
+    function _getSystemActionList(handleSuccess, handleError) {
+        
+        
+     
+      var ret = _defResult(), d = $q.defer();
+      console.log('Fetching system actions.. for ' + user.oID);
+        
+      if (!user.isLoggedIn) {
+          
+        handleError('User not logged in..');
+        return;
+      }
+        
+    
+      if(systemActionList.length !== 0) {
+          handleSuccess("success");
+          return;
+
+      }
+        
+      $timeout(function() {
+        d.notify('Fetching system actions..');
+      }, 0);
+    
+      console.log('Fetching system actions.. for ' + user.oID);
+      var o = {
+        'parentId': user.oID
+    
+      };
+
+      //send ajax form submission
+      Parse.save({api: 'getActions'}, o).$promise.then(function(data){
+          
+        $log.debug('get actions response ' + JSON.stringify(data));
+        if(angular.isUndefined(data.result) || data.result.status !== 'success') {
+            handleError(data.result);
+        }
+        /*Update all user info*/
+        
+        data.result.actions.forEach(function(sysAction) {
+            systemActionList.push(sysAction);   
+        
+        });
+       
+        handleSuccess("success");
+        
+    
+       
+      }).catch(function(r){
+          
+        handleError(r);
+      
+      }).finally(function(){
+          
+      });
+
+    }
 
 
 
@@ -991,6 +1130,7 @@ angular.module('freeminderApp')
       getSessionToken: function() { return user.sToken;},
       getUser: function() {return user;},
       getCustomers: function() {return customerList;},
+      getSystemActions: function() {return systemActionList;},
       signup: _signup,
       login: _login,
       fbLogin: _fbLogin,
@@ -1003,6 +1143,7 @@ angular.module('freeminderApp')
       updateUserInfo: _updateUserInfo,
       parseErrorResponse: _parseErrorResponse,
       getCustomerList: _getCustomerList,
+      getSystemActionList : _getSystemActionList,
       saveContact: _saveContact,
       importCSV: _importCSV,
       setSelectedContact: _setSelectedContact,
@@ -1010,6 +1151,7 @@ angular.module('freeminderApp')
       removeContact: _removeContact,
       getActions: _getActions,
       removeAction: _removeAction,
+      saveSysAction: _saveSysAction,
     };
 
     
