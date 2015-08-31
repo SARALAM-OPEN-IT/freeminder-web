@@ -9,10 +9,10 @@
  */
 angular.module('freeminderApp')
   .service('userService', ['$rootScope', '$http', '$q', '$log', '$timeout', '$window', 'configuration', 'Parse', 'Facebook', '$filter', function ( $rootScope, $http, $q, $log, $timeout, $window, config, Parse, Facebook, $filter) {
-      
+
     // AngularJS will instantiate a singleton by calling "new" on this function
-    
-      
+
+
     var _defUser = {  //Default user object
           'isLoggedIn' : false,
           'isFBUser' : false,
@@ -32,8 +32,8 @@ angular.module('freeminderApp')
         },
         user = {},    //cached user info
         fbReady = false, $ = $window.jQuery;
-      
-      
+
+
         var customerList = [];
         var systemActionList = [];
         var selectedContact = {};
@@ -66,9 +66,8 @@ angular.module('freeminderApp')
     //Update user info from Parse API response
     function _updateUserInfo(u, bNotify) {
       if(angular.isUndefined(bNotify)) {
-        bNotify = true;
-      }
-    
+       bNotify = true;
+     }
       user.email = u.email || '';
       user.mobile = u.mobile || '';
       user.name = u.username || '';
@@ -76,12 +75,8 @@ angular.module('freeminderApp')
       user.sToken = u.session || user.sToken;
       user.emailVerified = u.emailVerified;
       user.mobileVerified = u.mobileVerified || false;
-     
-      /* jshint -W106 */
-      //web_balance is from back-end response & ignore from jsHint
-      if(angular.isObject(u.web_balance)) {
-        user.walletBalance = u.web_balance.balance || 0;
-      }
+
+
       /* jshint +W106 */
       //store data store & other info
       _updateUserProfile(u);
@@ -89,6 +84,7 @@ angular.module('freeminderApp')
       if(bNotify) {
         _userStatusNotify();
       }
+
     }
 
     function _updateUserProfile(o) {
@@ -176,17 +172,17 @@ angular.module('freeminderApp')
       $timeout(function() {
         d.notify('validating');
       },0);
-        
+
         var o = {
           'email' : email,
           'password': password,
           'mobile': mobile,
           'username' : username,
           'service' : service_name
-          
+
         };
         Parse.save({api: 'appSignup'}, o).$promise.then(function(data){
-        $log.debug('Login response ' + JSON.stringify(data));
+        $log.debug('signup response ' + JSON.stringify(data));
         if(angular.isUndefined(data.result) || data.result.status !== 'success') {
           d.reject(ret);
         }
@@ -209,14 +205,14 @@ angular.module('freeminderApp')
       //always return deferred object
       return d.promise;
 
-     
+
     }
 
     function _login(username, password) {
       //normalize input
       username = username || '';
       password = password || '';
-   
+
       username = username.toLowerCase();  //email address should be case-insensitive here.
 
       var ret = _defResult(), d = $q.defer();
@@ -241,7 +237,7 @@ angular.module('freeminderApp')
       var o = {
         'username': username,
         'password': password
-       
+
       };
 
       //send ajax form submission
@@ -270,74 +266,6 @@ angular.module('freeminderApp')
       return d.promise;
     }
 
-    function _verifyMobile(code) {
-      var ret = _defResult(), d = $q.defer();
-
-      code = code || 0;
-      //pre-check
-      if(!code || !user.oID.length || user.mobileVerified) {
-        $log.debug('Code: ' + code.length + ' user: ' + user.oID.length);
-        $timeout(function() {
-          d.reject(ret);
-        }, 0);
-        return d.promise;
-      }
-
-      var o = {
-        'userId' : user.oID,
-        'code' : code
-      }, $req = Parse.save({api: 'appVerifyMobileCode'}, o).$promise;
-
-      $timeout(function() {
-        d.notify('Validating');
-      }, 0);
-      $req.then(function(data){
-        $log.debug('On mobile validation ' + angular.toJson(data));
-        //store the status locally
-        user.mobileVerified = true;
-        _updateLoggedInStatus();
-        _userStatusNotify();
-
-        ret.sts = true;
-        ret.msg = data.result.status;
-        d.resolve(ret);
-      },function(r){
-        $log.debug('On mobile validation failed ' + angular.toJson(r));
-        ret = _parseErrorResponse(r.data||r);
-        d.reject(ret);
-      });
-
-      return d.promise;
-    }
-    function _resendMobileVerificationCode() {
-      var ret = _defResult(), d = $q.defer();
-
-      //pre-check
-      if(!user.oID.length || user.mobileVerified) {
-        $timeout(function() {
-          d.reject(ret);
-        }, 0);
-        return d.promise;
-      }
-
-      var o = {
-        'userId': user.oID
-      };
-
-      $timeout(function() {
-        d.notify('Sending Mobile verification Code');
-      }, 0);
-      Parse.save({api: 'appResendMobileVerificationCode'}, o).$promise
-        .then(function(data) {
-        ret = _parseErrorResponse(data);
-        ret.sts = true;
-        d.resolve(ret);
-      }, function(r) {
-        ret = _parseErrorResponse(r.data);
-        d.reject(ret);
-      });
-      return d.promise;
-    }
     function _signout() {
       var ret = _defResult(), d = $q.defer(), p = d.promise;
 
@@ -556,6 +484,7 @@ angular.module('freeminderApp')
         var o = {
           facebook: {
             id: rData.authResponse.userID,
+            id: rData.authResponse.email,
             access_token: rData.authResponse.accessToken,
             expiration_date: $filter('date')(Date.now() + rData.authResponse.expiresIn * 1000, "yyyy-MM-ddTHH:mm:ss.sss'Z'", 'GMT')
           }
@@ -595,31 +524,31 @@ angular.module('freeminderApp')
 
       return p;
     }
-      
-      
+
+
     function _getCustomerList(handleSuccess, handleError) {
-     
+
        var ret = _defResult(), d = $q.defer();
-        
+
       if (!user.isLoggedIn) {
         handleError('User not logged in..');
         return;
       }
-        
-    
+
+
       if(customerList.length !== 0) {
           handleSuccess("success");
           return;
 
       }
-        
+
       $timeout(function() {
         d.notify('Fetching contacts..');
       }, 0);
-         
+
       var o = {
         'parentId': user.oID
-    
+
       };
 
       //send ajax form submission
@@ -629,27 +558,27 @@ angular.module('freeminderApp')
             handleError(data.result);
         }
         /*Update all user info*/
-        
+
         data.result.customers.forEach(function(customer) {
-            customerList.push(customer);   
-        
+            customerList.push(customer);
+
         });
-       
+
         handleSuccess("success");
-        
-    
-       
+
+
+
       }).catch(function(r){
-          
+
         handleError(r);
-      
+
       }).finally(function(){
-          
+
       });
 
     }
-      
-      
+
+
     function _saveContact(objectId, parentId, email, mobile, username, service_name, actions) {
       email = email || '';
       mobile = mobile || '';
@@ -673,7 +602,7 @@ angular.module('freeminderApp')
       $timeout(function() {
         d.notify('Saving Contact ');
       },0);
-        
+
         var o = {
           'objectId':objectId || '',
           'parentId':parentId,
@@ -681,10 +610,10 @@ angular.module('freeminderApp')
           'mobile': mobile,
           'username' : username,
           'service' : service_name
-          
+
         };
-        
-      
+
+
         Parse.save({api: 'saveContact'}, o).$promise.then(function(data){
             $log.debug('Save Contact response ' + JSON.stringify(data));
             if(angular.isUndefined(data.result) || data.result.status !== 'success') {
@@ -696,22 +625,22 @@ angular.module('freeminderApp')
             }
             //save actions
             actions.forEach(function(action) {
-                
+
                 var dom, service, frequency;
                 console.log('saving action ..' + action.objectId);
                 if(action.dom.id === 0) {
                     dom = '1';
                 }
-                
+
                 if(action.service.id === 0 ) {
-                    
+
                     service = 'OTHER SUBSCRIPTIONS';
                 }
-                
+
                 if(action.frequency.id === 0) {
-                    frequency = 'monthly';   
+                    frequency = 'monthly';
                 }
-                
+
                 var a = {
                     'objectId' : action.objectId,
                     'parentId' : data.result.customer.objectId,
@@ -726,18 +655,18 @@ angular.module('freeminderApp')
                     'dom' : action.dom.name,
                     'frequency' : action.frequency.name,
                     'runonsave' : 'false'
-                    
+
                 };
                console.log(a);
                Parse.save({api: 'saveAction'}, a).$promise.then(function(data){
                    $log.debug('after save action' + JSON.stringify(data));
-                   
+
                }).catch(function(r){
                    console.log('Unable save action'+ r.data);
-                   
+
                });
             });
-      
+
             ret.sts = true;
             d.resolve(user);
       }).catch(function(r){
@@ -755,10 +684,10 @@ angular.module('freeminderApp')
       //always return deferred object
       return d.promise;
 
-     
+
     }
 
-      
+
     function _importCSV(parentId, fileContent) {
       parentId = parentId || '';
       fileContent = fileContent || '';
@@ -779,11 +708,11 @@ angular.module('freeminderApp')
       $timeout(function() {
         d.notify('Importing');
       },0);
-    
+
         var lines = fileContent.split("\n");
         lines.forEach(function(line) {
            var fields = line.split(",");
-            
+
                 var o = {
                       'parentId':parentId,
                       'email' : fields[1],
@@ -792,7 +721,7 @@ angular.module('freeminderApp')
                       'service' : fields[3]
 
                 };
-            
+
                 Parse.save({api: 'saveContact'}, o).$promise.then(function(data){
                     $log.debug('Save Contact response ' + JSON.stringify(data));
                     if(angular.isUndefined(data.result) || data.result.status !== 'success') {
@@ -814,39 +743,39 @@ angular.module('freeminderApp')
                       d.notify(s);
                     }
                 });
-            
-      
+
+
         });
-        
+
         //always return deferred object
       return d.promise;
 
-     
+
     }
-      
+
     function _setSelectedContact (contact) {
-        
+
         //angular.merge(selectedContact, contact);
         for(var key in contact) {
-         selectedContact[key] = contact[key];   
+         selectedContact[key] = contact[key];
         }
         console.log("selectd " + selectedContact.email);
     }
-      
-      
+
+
     function _getSelectedContact () {
-        
+
         return selectedContact;
-        
+
     }
-      
+
     function _removeContact(contact) {
-        
+
         console.log('removing contact ' + contact.objectId);
-        
+
         //normalize input
         var objectId = contact.objectId || '';
-   
+
         var ret = _defResult(), d = $q.defer();
 
         //input validation
@@ -872,7 +801,7 @@ angular.module('freeminderApp')
               d.reject(ret);
             }
             /*Update all user info*/
-            
+
             ret.sts = true;
             d.resolve(user);
           }).catch(function(r){
@@ -890,16 +819,16 @@ angular.module('freeminderApp')
           //always return deferred object
           return d.promise;
 
-        
+
     }
-      
-      
+
+
     function _getActions(parentId) {
         console.log('getiing action for ' + parentId);
-        
+
         //normalize input
         var parentId = parentId || '';
-   
+
         var ret = _defResult(), d = $q.defer();
 
         if(!parentId.length) {
@@ -916,7 +845,7 @@ angular.module('freeminderApp')
 
         Parse.save({api: 'getActions'}, o).$promise.then(function(data){
             $log.debug(' response ' + JSON.stringify(data));
-            
+
             if(angular.isUndefined(data.result)) {
               d.reject(ret);
             }
@@ -937,14 +866,14 @@ angular.module('freeminderApp')
           //always return deferred object
           return d.promise;
     }
-      
-      
+
+
     function _removeAction(objectId) {
         console.log('removing action for ' + objectId);
-        
+
         //normalize input
         var objectId = objectId || '';
-   
+
         var ret = _defResult(), d = $q.defer();
 
         if(!objectId.length) {
@@ -961,7 +890,7 @@ angular.module('freeminderApp')
 
         Parse.save({api: 'removeAction'}, o).$promise.then(function(data){
             $log.debug(' response ' + JSON.stringify(data));
-            
+
             if(angular.isUndefined(data.result)) {
               d.reject(ret);
             }
@@ -982,10 +911,10 @@ angular.module('freeminderApp')
           //always return deferred object
           return d.promise;
     }
-      
-      
+
+
     function _saveSysAction (objectId, parentId, actions) {
-        
+
         var parentId = parentId || '';
         var ret = _defResult(), d = $q.defer();
 
@@ -1019,7 +948,7 @@ angular.module('freeminderApp')
              }
 
             if(action.frequency.id === 0) {
-                frequency = 'monthly';   
+                frequency = 'monthly';
             }
 
             var a = {
@@ -1041,7 +970,7 @@ angular.module('freeminderApp')
             console.log(a);
             Parse.save({api: 'saveAction'}, a).$promise.then(function(data){
                 $log.debug('after save action' + JSON.stringify(data));
-                
+
                 systemActionList.push(data.result.action);
 
             }).catch(function(r){
@@ -1058,65 +987,65 @@ angular.module('freeminderApp')
         return d.promise;
 
 
-        
-        
+
+
     }
-      
-      
+
+
     function _getSystemActionList(handleSuccess, handleError) {
-        
-        
-     
+
+
+
       var ret = _defResult(), d = $q.defer();
       console.log('Fetching system actions.. for ' + user.oID);
-        
+
       if (!user.isLoggedIn) {
-          
+
         handleError('User not logged in..');
         return;
       }
-        
-    
+
+
       if(systemActionList.length !== 0) {
           handleSuccess("success");
           return;
 
       }
-        
+
       $timeout(function() {
         d.notify('Fetching system actions..');
       }, 0);
-    
+
       console.log('Fetching system actions.. for ' + user.oID);
       var o = {
         'parentId': user.oID
-    
+
       };
 
       //send ajax form submission
       Parse.save({api: 'getActions'}, o).$promise.then(function(data){
-          
+
         $log.debug('get actions response ' + JSON.stringify(data));
         if(angular.isUndefined(data.result) || data.result.status !== 'success') {
             handleError(data.result);
         }
         /*Update all user info*/
-        
+
         data.result.actions.forEach(function(sysAction) {
-            systemActionList.push(sysAction);   
-        
+            systemActionList.push(sysAction);
+
         });
-       
+
         handleSuccess("success");
-        
-    
-       
+
+
+
       }).catch(function(r){
-          
+
         handleError(r);
-      
+
       }).finally(function(){
-          
+
       });
 
     }
@@ -1135,8 +1064,6 @@ angular.module('freeminderApp')
       login: _login,
       fbLogin: _fbLogin,
       fbPreLoginCheck: _fbPreLoginCheck,
-      verifyMobile: _verifyMobile,
-      resendMobileVerificationCode: _resendMobileVerificationCode,
       signout: _signout,
       fetchUserProfile: _fetchUserProfile,
       forgotPassword: _forgotPassword,
@@ -1154,6 +1081,6 @@ angular.module('freeminderApp')
       saveSysAction: _saveSysAction,
     };
 
-    
-    
+
+
   }]);

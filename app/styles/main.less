@@ -57,11 +57,36 @@ html, body {
       display:inline-block !important;
     }
   }
+  /* changes for showing footer in tablet mode
+     need to override default nav/navbar styles to show similar to desktop */
+  @media(min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+    float: left;
+    margin: 0px;
+  }
+}
+
+/* changes for showing footer in tablet mode
+   need to override default nav/navbar styles to show similar to desktop */
+.footer ul.navbar-right {
+  @media(min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+    float:right !important;
+    &:first-child {
+      margin-right: -15px;
+    }
+  }
+}
+
+.hiw-body {
+  padding:0px;
+}
+
+a[ng-click]{
+  cursor: pointer;
 }
 
 /* Make the masthead heading the same height as the navigation */
 .header .nav {
-  @media(max-width: @screen-sm-min) {
+  @media(max-width: @screen-sm-max) {
     margin-top: 0;
     margin-bottom:0;
   }
@@ -81,7 +106,7 @@ html, body {
 .loggedin-navbar .loggedin-nav {
   display:block !important;
   &.xs-loggedin-menu {
-    @media (min-width: @screen-sm-min) {
+    @media (min-width: @screen-md-min) {
       display: none !important;
     }
   }
@@ -119,7 +144,7 @@ html, body {
 
 /*Move toggle button to left in mobile view*/
 .header .navbar-toggle-left {
-  @media (max-width: @screen-sm-min) {
+  @media (max-width: @screen-sm-max) {
     float:left;
     margin-left: 15px;
   }
@@ -599,6 +624,7 @@ a.store-links {
   margin-left: -10px;
   @media (min-width: @screen-sm-min) {
     text-align:left;
+    width: 279px;
   }
   @media (max-width: @screen-xs-max) {
     padding-left:0px;
@@ -625,12 +651,26 @@ a.store-links {
   font-size:18px;
 }
 
+.wc-cardnumber-sec {
+  @media (min-width: @screen-md-min) {
+    display: inline-block;
+  }
+}
+
+.wc-cardnumber {
+  padding-right:10px;
+  display:inline-block;
+}
+
 .wc-barcode {
-  text-align:center;
-  padding-bottom:30px;
-  @media (min-width: @screen-sm-min) {
-    float:right !important;
-    padding-bottom:0px;
+  float:right;
+  @media (max-width: @screen-sm-max) {
+    float:none  !important;
+    padding-bottom:10px;
+  }
+  @media (max-width: @screen-xs-max) {
+    text-align:center;
+    padding-bottom:30px;
   }
 }
 
@@ -1008,7 +1048,7 @@ a.store-links {
 .feature-header {
   @media (max-width: @screen-lg-min) {
     font-size: (95 * @font-size-h1)/100;
-    .centered-text;
+    text-align: left;
   }
   @media (max-width: @screen-md-min) {
     font-size: (85 * @font-size-h1)/100;
@@ -1016,22 +1056,19 @@ a.store-links {
   }
   @media (max-width: @screen-sm-min) {
     font-size: (75 * @font-size-h1)/100;
-    text-align: left;
+    .centered-text;
   }
 }
 
 .feature-description {
-  font-size: 24px;
+  font-size: 22px;
   font-family: Open Sans,Helvetica Neue,Helvetica,Arial,sans-serif;
   color: rgba(0,0,0, 0.50);
   line-height:1.6;
   font-weight: 300;
-  @media (max-width: @screen-sm-min) {
-    text-align: left;
-  }
   @media (max-width: @screen-lg-min) {
     font-size: (95 * 24px)/100;
-    .centered-text;
+    text-align: left;
   }
   @media (max-width: @screen-md-min) {
     font-size: (85 * 24px)/100;
@@ -1039,7 +1076,7 @@ a.store-links {
   }
   @media (max-width: @screen-sm-min) {
     font-size: (75 * 24px)/100;
-    text-align: left;
+    .centered-text;
   }
 }
 
@@ -1124,6 +1161,15 @@ a.store-links {
  @media (max-width: @screen-md-min) {
    width: 160px;
  }
+}
+
+.appstore-icons-position {
+  @media (min-width: @screen-xs-min) {
+    text-align: center;
+  }
+  @media (min-width: @screen-sm-min) {
+    text-align: left;
+  }
 }
 
 .home-lp-appstore-icons {
@@ -1635,6 +1681,10 @@ a#braintree-paypal-button {
   .navbar-nav li a {
     padding-left: 5px !important;
     padding-right: 10px !important;
+  }
+  .footer .navbar-nav li.post-dot a {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
   }
   .navbar li:first-child a.store-links {
     padding-right: 10px !important;

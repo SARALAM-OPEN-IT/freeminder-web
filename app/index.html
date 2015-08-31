@@ -2,32 +2,41 @@
 <html class="no-js">
   <head>
     <meta charset="utf-8">
-    <title>Freeminder Web</title>
+    <title>freeminder: Automatic Annivesary Wishes | Automatic Birthday Wishes | Automatic Reminders | Free SMS | Free Eamil </title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-itunes-app" content="app-id=963847276">
+    <link rel="manifest" href="manifest.json">
     <meta name='mobile-web-app-capable' content='yes'>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
     <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-
-
-
-    <meta name="theme-color" content="#8f3a84">
-    <!-- build:css(.) styles/vendor.css -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#3a8f45">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#3a8f45">
+    <!-- build:css(.tmp) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
     <!-- endbower -->
     <link rel="stylesheet" href="styles/vendor.css">
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
- 
-
+    <!-- prefetch partials -->
+    <link rel="prefetch" href="/views/main.html">
+    <link rel="prefetch" href="/views/login.html">
   </head>
   <body data-ng-app="freeminderApp" data-ng-strict-di>
     <!--[if lte IE 9]>
@@ -46,26 +55,29 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
            </button>
-              
             <a class="navbar-brand" href="#/">
-              <img alt="freeminder" src="images/logo.png" width="200" height="40" />
+              <img alt="Freeminder" src="images/logo.png" width="200" height="40" />
             </a>
-
+            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#sw-navbar-collapse" aria-expanded="false" data-ng-show="isLoggedIn" id="profilepic_xs">
+              <profilepic data-isloggedin="{{isLoggedIn}}" data-profilepic="{{profilePic}}" data-initials="{{initials}}"></profilepic>
+            </button>
           </div>
           <!-- Collect all collapsible links here -->
           <div class="collapse navbar-collapse" id="sw-navbar-collapse">
-            <ul class="nav navbar-nav"> 
+            <ul class="nav navbar-nav">
+
               <li role="presentation"><a href="#/download">Download The App</a></li>
             </ul>
-            <a href="#/signup" class="btn btn-default navbar-btn navbar-right default-nav hidden-xs">Sign Up</a>
+            <a href="#/signup" class="btn btn-default navbar-btn navbar-right default-nav hidden-xs hidden-sm">Sign Up</a>
             <ul class="nav navbar-nav navbar-right">
               <li class="nav-divider" role="separator"></li>
               <li role="presentation" class="default-nav"><a href="#/login">Log In</a></li>
-              <li role="presentation" class="default-nav visible-xs-inline-block"><a href="#/signup">Sign Up</a></li>
-                
+              <li role="presentation" class="default-nav visible-xs-inline-block visible-sm-inline-block"><a href="#/signup">Sign Up</a></li>
               <li class="dropdown loggedin-nav">
 
-                <a target="_self" href="#" class="dropdown-toggle navbar-sw-dd clearfix hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-ng-class="loggedinClass">
+                <a target="_self" href="#" class="dropdown-toggle navbar-sw-dd clearfix hidden-xs hidden-sm" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-ng-class="loggedinClass">
+                  <profilepic data-isloggedin="{{isLoggedIn}}" data-profilepic="{{profilePic}}" data-initials="{{initials}}"></profilepic>
+                  <div class="hdr-balance pull-left text-center"><span class="text-primary"></span></div>
                   <div class="pull-left">
                     <div class="navbar-sw-name pull-left"><strong class="hidden-sm navbar-sw-name2">{{username}}</strong></div>
                     <span class="navbar-sw-name"><span class="caret-sw"></span></span>
@@ -73,11 +85,15 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a href="#/profile">My Profile</a></li>
+                  <li><a href="#/sysaction-list">Common Actions</a></li>
+                  <li><a href="#/myplan">My Plan</a></li>
                   <li><a href="" data-ng-click="signout()">Log Out</a></li>
                 </ul>
               </li>
-              <li role="presentation" class="loggedin-nav visible-xs-inline-block xs-loggedin-menu"><a href="#/profile">My Profile</a></li>
-              <li role="presentation" class="loggedin-nav visible-xs-inline-block xs-loggedin-menu"><a href="" data-ng-click="signout()">Log Out</a></li>
+              <li role="presentation" class="loggedin-nav visible-xs-inline-block visible-sm-inline-block xs-loggedin-menu"><a href="#/profile">My Profile</a></li>
+              <li role="presentation" class="loggedin-nav visible-xs-inline-block visible-sm-inline-block xs-loggedin-menu"><a href="#/sysaction-list">My Cpmmon Actions</a></li>
+              <li role="presentation" class="loggedin-nav visible-xs-inline-block visible-sm-inline-block xs-loggedin-menu"><a href="#/myplan">My Plan</a></li>
+              <li role="presentation" class="loggedin-nav visible-xs-inline-block visible-sm-inline-block xs-loggedin-menu"><a href="" data-ng-click="signout()">Log Out</a></li>
             </ul>
           </div>
         </div>
@@ -93,44 +109,36 @@
           <div class="row">
             <ul class="nav navbar-nav app-navbar img-navbar">
               <li>
-                <a href="https://play.google.com/store/apps/details?id=com.swappableapp" class="store-links" target="_blank">
+                <a href="https://itunes.apple.com/app/1234" class="store-links" target="_blank">
+                  <img alt="Download on the App Store" src="images/ios_store_logo.png" />
+                </a>
+              </li>
+              <li>
+                <a href="https://play.google.com/store/apps/details?id=com.test" class="store-links" target="_blank">
                   <img alt="Get it on Google Play" src="images/play_store_logo.png" />
                 </a>
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right img-navbar">
               <li>
-                <a class="social-links" href="https://www.facebook.com/swappableapp" target="_blank"><img alt="Swappable on Facebook" src="images/fb_logo.png"/></a>
+                <a class="social-links" href="https://www.facebook.com/freeminder.in" target="_blank"><img alt=" on Facebook" src="images/fb_logo.png"/></a>
               </li>
               <li>
-                <a class="social-links" href="https://twitter.com/SwappableApp" target="_blank"><img alt="Swappable on Twitter" src="images/tw_logo.png"/></a>
+                <a class="social-links" href="https://twitter.com/freeminder.in" target="_blank"><img alt=" on Twitter" src="images/tw_logo.png"/></a>
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right img-navbar">
-              <li class="post-dot"><a href="mailto:help@etst.com?subject=Contact Us">Contact</a></li>
-              <li class="post-dot"><a href="#/faq">FAQ</a></li>
-              <li class="post-dot"><a href="#/terms">Terms</a></li>
-              <li class="post-dot no-after-xs"><a href="#/privacy">Privacy</a></li>
+              <li class="post-dot"><a href="mailto:contact@freeminder.in?subject=Contact Us">Contact</a></li>
+              <li class="post-dot"><a href="#/qna">FAQ</a></li>
+              <li class="post-dot"><a href="#/tnc">Terms</a></li>
+
 
             </ul>
           </div>
-          <div class="row text-center text-muted footer-copyright"><small>&copy; Swappable 2015. All rights reserved.</small></div>
+          <div class="row text-center text-muted footer-copyright"><small>&copy; freeminder {{cuurentYear}}. All rights reserved.</small></div>
         </div>
       </nav>
     </div>
-
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
-       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
-    </script>
-   
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -138,16 +146,19 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/braintree-web/dist/braintree.js"></script>
     <script src="bower_components/angular-google-analytics/dist/angular-google-analytics.min.js"></script>
     <script src="bower_components/angular-busy/dist/angular-busy.js"></script>
     <script src="bower_components/angular-facebook/lib/angular-facebook.js"></script>
     <script src="bower_components/angular-payments/lib/angular-payments.js"></script>
     <script src="bower_components/angular-recaptcha/release/angular-recaptcha.js"></script>
-    <script src="bower_components/node-uuid/uuid.js"></script>
+    <script src="bower_components/jsbarcode/JsBarcode.js"></script>
+    <script src="bower_components/jstzdetect/jstz.min.js"></script>
     <script src="bower_components/angular-ui-scroll/dist/ui-scroll.js"></script>
     <script src="bower_components/angular-ui-scrollpoint/dist/scrollpoint.js"></script>
     <script src="bower_components/angular-ui-event/dist/event.js"></script>
@@ -165,11 +176,14 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/controllers/profile.js"></script>
         <script src="scripts/controllers/signup.js"></script>
+         <script src="scripts/services/profile.js"></script>
+        <script src="scripts/services/parse.js"></script>
         <script src="scripts/controllers/login.js"></script>
+        <script src="scripts/controllers/header.js"></script>
         <script src="scripts/services/userservice.js"></script>
         <script src="scripts/services/parse.js"></script>
-        <script src="scripts/services/config.js"></script>
         <script src="scripts/controllers/customer-list.js"></script>
         <script src="scripts/controllers/edit-contact.js"></script>
         <script src="scripts/controllers/import-file.js"></script>
@@ -183,6 +197,55 @@
         <script src="scripts/controllers/leftnav.js"></script>
         <script src="scripts/controllers/system-action.js"></script>
         <script src="scripts/controllers/sysaction-list.js"></script>
+        <script src="scripts/services/config.js"></script>
+        <script src="scripts/controllers/leftnav.js"></script>
+        <script src="scripts/controllers/footer.js"></script>
+        <script src="scripts/services/textresource.js"></script>
+        <script src="scripts/controllers/how-it-works.js"></script>
         <!-- endbuild -->
+        <script>
+        /*Loading dynamic fonts using web font loader*/
+        WebFontConfig = {
+          google: { families: ['Open Sans:700,300,600,400']
+                  },
+          custom: { families: ['FontAwesome'],
+                   urls: ['//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'],
+                   testStrings: {
+                     'FontAwesome': '\uf083\uf015'
+                   }
+                  }
+        };
+        /*Load twitter script async*/
+        window.twttr = (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0],
+            t = window.twttr || {};
+          if (d.getElementById(id)) return t;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "https://platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js, fjs);
+
+          t._e = [];
+          t.ready = function(f) {
+            t._e.push(f);
+          };
+
+          return t;
+        }(document, "script", "twitter-wjs"));
+
+        //Load after doc.ready
+        $(function() {
+          var d = document, wf = d.createElement('script'), s = d.scripts[0];
+          wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js';
+          s.parentNode.insertBefore(wf, s);
+        });
+      </script>
+      <!-- build:js(.) scripts/vendor2.js -->
+
+      <script src="bower_components/node-uuid/uuid.js" async defer></script>
+
+
+      <!-- endbuild -->
+
 </body>
 </html>

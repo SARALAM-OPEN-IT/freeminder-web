@@ -3,7 +3,7 @@
 describe('Controller: LeftnavCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('freeminderApp'));
+  beforeEach(module('swappableWebApp'));
 
   var LeftnavCtrl,
     scope;
@@ -13,11 +13,10 @@ describe('Controller: LeftnavCtrl', function () {
     scope = $rootScope.$new();
     LeftnavCtrl = $controller('LeftnavCtrl', {
       $scope: scope
-      // place here mocked dependencies
     });
   }));
 
   it('should attach a list of awesomeThings to the scope', function () {
-    expect(LeftnavCtrl.awesomeThings.length).toBe(3);
+    expect(scope.awesomeThings.length).toBe(3);
   });
 });

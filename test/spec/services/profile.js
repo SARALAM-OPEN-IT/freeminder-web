@@ -3,7 +3,7 @@
 describe('Service: profile', function () {
 
   // load the service's module
-  beforeEach(module('freeminderApp'));
+  beforeEach(module('swappableWebApp'));
 
   // instantiate service
   var profile;

@@ -20,10 +20,10 @@ angular
     'cgBusy',
     'facebook',
     'ui.date'
-    
+
   ])
  .config(['$routeProvider', 'AnalyticsProvider', '$logProvider', '$compileProvider', 'configuration', 'FacebookProvider', function ($routeProvider, AnalyticsProvider, $logProvider, $compileProvider, config, FacebookProvider) {
-    
+
     //enable/disable debugging based on config
     $logProvider.debugEnabled(config.debug);
     //enable/disable AngularJS debugging data
@@ -38,7 +38,7 @@ angular
       status: true,      //Check login status at startup
       xfbml: false      //we are not using xfbml tags to render FB plug-in code
     }, true);
-    
+
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -92,7 +92,8 @@ angular
       .when('/profile', {
         templateUrl: 'views/profile.html',
         controller: 'ProfileCtrl',
-        controllerAs: 'profile'
+        controllerAs: 'profile',
+        requireLogin: true
       })
       .when('/leftnav', {
         templateUrl: 'views/leftnav.html',
@@ -109,6 +110,12 @@ angular
         templateUrl: 'views/sysaction-list.html',
         controller: 'SysactionListCtrl',
         controllerAs: 'sysactionList'
+      })
+      .when('/qna', {
+        templateUrl: 'views/qna.html'
+      })
+      .when('/tnc', {
+        templateUrl: 'views/tnc.html'
       })
       .otherwise({
         redirectTo: '/'

@@ -3,7 +3,7 @@
 describe('Controller: FooterCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('freeminderApp'));
+  beforeEach(module('swappableWebApp'));
 
   var FooterCtrl,
     scope;
@@ -13,11 +13,10 @@ describe('Controller: FooterCtrl', function () {
     scope = $rootScope.$new();
     FooterCtrl = $controller('FooterCtrl', {
       $scope: scope
-      // place here mocked dependencies
     });
   }));
 
   it('should attach a list of awesomeThings to the scope', function () {
-    expect(FooterCtrl.awesomeThings.length).toBe(3);
+    expect(scope.awesomeThings.length).toBe(3);
   });
 });

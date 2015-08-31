@@ -11,6 +11,7 @@ angular.module('freeminderApp')
   .controller('FooterCtrl', ['$scope', '$rootScope', '$location', 'configuration', function ($scope, $rootScope, $location, config) {
     $scope.footerClass = 'no-footer-navbar';
     $scope.footerVersion = config.clientVersion;
+    $scope.cuurentYear = new Date().getFullYear();
 
   function _UpdateFooterMode() {
     var noFooterViews = ['/forgotpassword', '/login', '/signup'],

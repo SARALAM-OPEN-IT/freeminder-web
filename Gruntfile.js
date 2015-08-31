@@ -1,4 +1,4 @@
-// Generated on 2015-07-28 using generator-angular 0.12.1
+// Generated on 2015-06-22 using generator-angular 0.11.1
 'use strict';
 
 // # Globbing
@@ -9,19 +9,11 @@
 
 module.exports = function (grunt) {
 
-  // Time how long tasks take. Can help when optimizing build times
-    
+  // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
+
+  // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
-    
-
-
-  // Automatically load required Grunt tasks
-  require('jit-grunt')(grunt, {
-    useminPrepare: 'grunt-usemin',
-    ngtemplates: 'grunt-angular-templates',
-    cdnify: 'grunt-google-cdn'
-  });
 
   // Configurable paths for the application
   var appConfig = {
@@ -37,6 +29,9 @@ module.exports = function (grunt) {
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
+      options: {
+        // spawn: false // Important, don't remove this!
+    },
       bower: {
         files: ['bower.json'],
         tasks: ['wiredep']
@@ -52,21 +47,25 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
       },
-      styles: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
-        tasks: ['newer:copy:styles', 'autoprefixer']
+      less: {
+        files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
+        tasks: ['less:server', 'postcss']
+      },
+      config: {
+        files: ['./config/environments/*.json', './config/config.js'],
+        tasks: ['replace:development']
       },
       gruntfile: {
         files: ['Gruntfile.js']
       },
-      livereload: {
+       livereload: {
         options: {
           livereload: '<%= connect.options.livereload %>'
         },
         files: [
-          '<%= yeoman.app %>/{,*/}*.html',
-          '.tmp/styles/{,*/}*.css',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+         '<%= yeoman.app %>/{,*/}*.html',
+         '.tmp/styles/{,*/}*.css',
+         '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
     },
@@ -156,15 +155,17 @@ module.exports = function (grunt) {
       },
       server: '.tmp'
     },
-
     // Add vendor prefixed styles
-    autoprefixer: {
+    postcss: {
       options: {
-        browsers: ['last 1 version']
+        processors: [
+          require('pixrem')(),
+          require('autoprefixer-core')({browsers: 'last 1 version'})
+        ]
       },
       server: {
         options: {
-          map: true,
+          map:true
         },
         files: [{
           expand: true,
@@ -204,6 +205,34 @@ module.exports = function (grunt) {
               }
             }
           }
+      },
+      less: {
+        src: ['<%= yeoman.app %>/styles/{,*/}*.less'],
+        ignorePath: /(\.\.\/){1,2}bower_components\//
+      }
+    },
+
+    //Compile less to CSS and generate necessary files if required
+    less: {
+      options: {
+        paths: ['./bower_components','<%= yeoman.app %>/styles/']
+        //dumpLineNumbers: true
+      },
+      dist: {
+        expand: true, // set to true to enable options following options:
+        cwd: '<%= yeoman.app %>/styles/', // all sources relative to this path
+        src: ['**/{main,vendor,bootstrap_debug}.less'], // source folder patterns to match, relative to cwd
+        dest: '.tmp/styles/', // destination folder path prefix
+        ext: '.css', // replace any existing extension with this value in dest folder
+        flatten: true  // flatten folder structure to single level
+      },
+      server: {
+        expand: true, // set to true to enable options following options:
+        cwd: '<%= yeoman.app %>/styles/', // all sources relative to this path
+        src: ['**/{main,vendor,bootstrap_debug}.less'], // source folder patterns to match, relative to cwd
+        dest: '.tmp/styles/', // destination folder path prefix
+        ext: '.css', // replace any existing extension with this value in dest folder
+        flatten: true  // flatten folder structure to single level
       }
     },
 
@@ -242,16 +271,14 @@ module.exports = function (grunt) {
     usemin: {
       html: ['<%= yeoman.dist %>/{,*/}*.html'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
-      js: ['<%= yeoman.dist %>/scripts/{,*/}*.js'],
+      json:['<%= yeoman.dist %>/{,*/}*.json'],
+      xml:['<%= yeoman.dist %>/{,*/}*.xml'],
       options: {
         assetsDirs: [
           '<%= yeoman.dist %>',
           '<%= yeoman.dist %>/images',
           '<%= yeoman.dist %>/styles'
-        ],
-        patterns: {
-          js: [[/(images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images']]
-        }
+        ]
       }
     },
 
@@ -280,53 +307,6 @@ module.exports = function (grunt) {
     // concat: {
     //   dist: {}
     // },
-      
-      
-    replace: {
-        development: {
-          options: {
-            patterns: [{
-              json: grunt.file.readJSON('./config/environments/development.json')
-            }]
-          },
-          files: [{
-            expand: true,
-            flatten: true,
-            src: ['./config/config.js'],
-            dest: '<%= yeoman.app %>/scripts/services/'
-          }]
-        },
-        
-        staging: {
-            options: {
-              patterns: [{
-                json: grunt.file.readJSON('./config/environments/staging.json')
-              }]
-            },
-            files: [{
-              expand: true,
-              flatten: true,
-              src: ['./config/config.js'],
-              dest: '<%= yeoman.app %>/scripts/services/'
-            }]
-        },
-        
-        production: {
-            options: {
-              patterns: [{
-                json: grunt.file.readJSON('./config/environments/production.json')
-              }]
-            },
-            files: [{
-              expand: true,
-              flatten: true,
-              src: ['./config/config.js'],
-              dest: '<%= yeoman.app %>/scripts/services/'
-            }]
-        }
-    },
-        
-    
 
     imagemin: {
       dist: {
@@ -356,27 +336,15 @@ module.exports = function (grunt) {
           collapseWhitespace: true,
           conservativeCollapse: true,
           collapseBooleanAttributes: true,
-          removeCommentsFromCDATA: true
+          removeCommentsFromCDATA: true,
+          removeOptionalTags: true
         },
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
-          src: ['*.html'],
+          src: ['*.html', 'views/{,*/}*.html'],
           dest: '<%= yeoman.dist %>'
         }]
-      }
-    },
-
-    ngtemplates: {
-      dist: {
-        options: {
-          module: 'freeminderApp',
-          htmlmin: '<%= htmlmin.dist.options %>',
-          usemin: 'scripts/scripts.js'
-        },
-        cwd: '<%= yeoman.app %>',
-        src: 'views/{,*/}*.html',
-        dest: '.tmp/templateCache.js'
       }
     },
 
@@ -393,13 +361,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // Replace Google CDN references
-    cdnify: {
-      dist: {
-        html: ['<%= yeoman.dist %>/*.html']
-      }
-    },
-
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
@@ -412,6 +373,9 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
+            '*.xml',
+            '*.json',
+            'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
             'styles/fonts/{,*/}*.*'
           ]
@@ -432,19 +396,80 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      },
+      fonts: {
+        expand: true,
+        cwd: 'bower_components/bootstrap/dist',
+        src: 'fonts/*',
+        dest: '.tmp'
+      }
+    },
+    replace: {
+      development: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./config/environments/development.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./config/config.js'],
+          dest: '<%= yeoman.app %>/scripts/services/'
+        }]
+      },
+      integration: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./config/environments/integration.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./config/config.js'],
+          dest: '<%= yeoman.app %>/scripts/services/'
+        }]
+      },
+      staging: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./config/environments/staging.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./config/config.js'],
+          dest: '<%= yeoman.app %>/scripts/services/'
+        }]
+      },
+      production: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./config/environments/production.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./config/config.js'],
+          dest: '<%= yeoman.app %>/scripts/services/'
+        }]
       }
     },
 
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-        'copy:styles'
+        'copy:fonts',
+        'less:server'
       ],
       test: [
-        'copy:styles'
+        'less'
       ],
       dist: [
-        'copy:styles',
+        'less:dist',
         'imagemin',
         'svgmin'
       ]
@@ -456,83 +481,194 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    // Add the browser_sync task options
+    browserSync: {
+      files: [
+          '<%= yeoman.app %>/{,*/}*.html',
+          '.tmp/styles/{,*/}*.css',
+          '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
+          '<%= yeoman.app %>/images/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
+      ],
+      options: {
+        watchTask: true,
+        ghostMode: {
+          clicks: true,
+          scroll: true,
+          links: true,
+          forms: true,
+        },
+        server: {
+          baseDir: [
+            '<%= yeoman.app %>',
+            '.tmp'
+          ],
+          routes: {
+            '/bower_components': './bower_components'
+          }
+        }
+      },
+    },
+
+    /*Compression task for production*/
+    compress: {
+      dist: {
+        options: {
+          mode: 'gzip',
+          level: 9
+        },
+        files: [
+          {
+            expand: true,
+            extDot: 'last',
+            src: ['<%= yeoman.dist %>/**/*.{txt,html,ico,xml,svg,js,css,ttf,json,map}'],
+            rename: function(dest, src) {
+              return src + '.gz';
+            }
+          }
+        ]
+      }
+    },
+    pagespeed: {
+      options: {
+        nokey: true,
+        url: 'https://test.swappableapp.com'
+      },
+      integrationDesktop: {
+        options: {
+          url: 'https://test.swappable.com',
+          locale: 'en_US',
+          strategy: 'desktop',
+          threshold: 70
+        }
+      },
+      integrationMobile: {
+        options: {
+          url: 'https://test.swappable.com',
+          locale: 'en_US',
+          strategy: 'mobile',
+          threshold: 40
+        }
+      },
+      stagingDesktop: {
+        options: {
+          url: 'https://teststaging.swappable.com',
+          locale: 'en_US',
+          strategy: 'desktop',
+          threshold: 70
+        }
+      },
+      stagingMobile: {
+        options: {
+          url: 'https://teststaging.swappable.com',
+          locale: 'en_US',
+          strategy: 'mobile',
+          threshold: 40
+        }
+      },
+      productionDesktop: {
+        options: {
+          url: 'https://swappable.com',
+          locale: 'en_US',
+          strategy: 'desktop',
+          threshold: 70
+        }
+      },
+      productionMobile: {
+        options: {
+          url: 'https://swappable.com',
+          locale: 'en_US',
+          strategy: 'mobile',
+          threshold: 40
+        }
+      }
+    },
+    perf: {
+      integration: ['pagespeed:integrationDesktop', 'pagespeed:integrationMobile'],
+      staging: ['pagespeed:stagingDesktop', 'pagespeed:stagingMobile'],
+      production: ['pagespeed:productionDesktop', 'pagespeed:productionMobile']
     }
   });
 
+  grunt.loadNpmTasks('grunt-browser-sync');
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
     }
-    
-    if (target === 'dist') {
-      return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
-    }
-      
-      
+
     grunt.task.run([
       'clean:server',
+      'replace:development',
       'wiredep',
       'concurrent:server',
-      'autoprefixer:server',
+      'postcss:server',
       'connect:livereload',
-      'replace:development',
+      'browserSync',
       'watch'
     ]);
-    
-      
-    
   });
 
   grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
     grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
     grunt.task.run(['serve:' + target]);
-      
-    
   });
-
-  
 
   grunt.registerTask('test', [
     'clean:server',
     'wiredep',
     'concurrent:test',
-    'autoprefixer',
+    'postcss',
     'connect:test',
     'karma'
   ]);
 
-  grunt.registerTask('build', [
-    'clean:dist',
-    'wiredep',
-    'useminPrepare',
-    'concurrent:dist',
-    'autoprefixer',
-    'ngtemplates',
-    'concat',
-    'ngAnnotate',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    'filerev',
-    'usemin',
-    'htmlmin'
-  ]);
+  grunt.registerTask('build', 'Production/staging build task', function(type) {
+    type = type || '';
+    if(!type.length || !(type === 'integration' || type === 'staging' || type === 'production')) {
+      grunt.fail.fatal('Invoke as either "build:integration", "build:staging" or "build:production"');
+      return;
+    }
+    var bProd = (type === 'production');
+
+    //enable sourcemap for staging
+    if(!bProd) {
+      grunt.config.set('cssmin.options.sourceMap', true);
+      grunt.config.set('uglify.options.sourceMap', true);
+      grunt.config.set('uglify.options.sourceMapIncludeSources', true);
+    }
+
+
+    var replaceTask = 'replace:' + type;
+    //Build task list based on staging & production target
+    var tasks = [
+      'clean:dist',
+      replaceTask,
+      'wiredep',
+      'useminPrepare',
+      'concurrent:dist',
+      'postcss',
+      'concat',
+      'ngAnnotate',
+      'copy:dist',
+      'cssmin',
+      'uglify',
+      'filerev',
+      'usemin',
+      'htmlmin',
+      'compress:dist'
+    ];
+    grunt.task.run(tasks);
+  });
+  grunt.registerMultiTask('perf', 'Performance Test tasks', function() {
+    grunt.task.run(this.data);
+  });
 
   grunt.registerTask('default', [
     'newer:jshint',
     'test',
     'build'
-  ]);
-    
-  grunt.registerTask('staging', [
-    'replace:staging'
-    // Add further deploy related tasks here
-  ]);
 
-  grunt.registerTask('production', [
-    'replace:production'
-    // Add further deploy related tasks here
   ]);
 };

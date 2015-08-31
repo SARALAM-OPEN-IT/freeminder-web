@@ -13,9 +13,7 @@ angular.module('freeminderApp')
 
       // populate data required for rendering
       $scope.page = 'profile';
-      $scope.states = config.states;
       $scope.pInfo = {};
-      $scope.uploadProgress = 0;
       $scope.successMessage = '';
       $scope.errorMessage = '';
       $scope.formValidationError = false;
@@ -35,7 +33,6 @@ angular.module('freeminderApp')
         $scope.image = prInfo.image || '';
         $scope.pInfo = prInfo;
         $scope.name = prInfo.firstName || prInfo.lastName;
-        $scope.pInfo.state = $scope.pInfo.state || $scope.states[0].id;
         $scope.pInfo.image = $scope.pInfo.image || '';
       };
 
@@ -249,4 +246,3 @@ angular.module('freeminderApp')
       };
 
   }]);
-

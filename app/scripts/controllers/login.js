@@ -10,12 +10,13 @@
 angular.module('freeminderApp')
   .controller('LoginCtrl', ['$scope', '$window', '$log', '$location', 'userService', 'Facebook', 'configuration',
     function ($scope,   $window,   $log,   $location,   userService,   Facebook,   Config) {
-                       
- 
+
+
     $scope.errMsg = '';
     $scope.lPromise = null;
     $scope.lMessage = '';
-    $scope.recaptchaKey = Config.recaptchaKey;
+    $scope.showFBLogin = true; //Config.enableFB;
+  
 
     /*Simple user form signup*/
     var captchaID = 0;
@@ -42,7 +43,7 @@ angular.module('freeminderApp')
         $log.debug('Login failed ' + JSON.stringify(res));
         $scope.errMsg = res.msg;
         //on failure reset the captcha widget as it can't be re-used
-       
+
       }, function(s) {
         $log.debug('On progress ' + s);
         $scope.lMessage = s;

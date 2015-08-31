@@ -1,6 +1,6 @@
 <div class="container">
 <div class="page-header">
-<h3 class="text-center">IT'S EASY TO GET STARTED</h3>
+<h3 class="text-center col-md-offset-1">IT'S EASY TO GET STARTED</h3>
 </div>
 <p class="text-center sw-bold wc-sec-content visible-xs"><strong>Already a member?&nbsp;&nbsp;</strong><a href="#/login" class="btn-link"><strong>Login</strong></a><br><br></p>
 <div data-cg-busy="{promise: lPromise, message: lMessage + '...'}"></div>
@@ -9,72 +9,67 @@
 </div>
 
 <div class="row">
-<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3" >
+  <!--<div class="col-sm-5 btn-fb-wrapper col-md-offset-1 col-md-4">
+        <button type="button" class="center-block btn btn-fb-sw btn-lg" data-ng-show="showFBLogin" data-ng-disabled="!facebookReady" data-ng-click="loginWithFacebook()" ><img src="images/fb_icon.png" alt="Facebook Icon">&nbsp;&nbsp;&nbsp;Sign Up with Facebook</button>
 
-    
+  </div>
+  <div class="col-sm-2 text-split-wrapper">
+   <div data-ng-show="showFBLogin">
+    <br class="visible-xs">
+    <div class="line"></div>
+    <div class="wordwrap"><h3>OR</h3></div>
+    <br class="visible-xs">
+    </div>
+  </div> -->
+  <div class="col-sm-5 col-md-5 col-lg-5 col-md-offset-4">
     <p class="text-center sw-bold wc-sec-content hidden-xs"><strong>Already a member?&nbsp;&nbsp;</strong><a href="#/login" class="btn-link"><strong>Login</strong></a></p>
     <br>
-    <form name="signupForm" ng-submit="submitForm()" >
-        
-         <div class="form-group has-feedback" data-ng-class="signupForm.user_name.$pristine ? '' : (signupForm.user_name.$valid? 'has-success' : 'has-error')">
-        <label for="user_name" class="sr-only"></label>
+    <form name="signupForm" ng-submit="submitForm()">
+      <div class="form-group">
         <div class="input-group">
-            <span class="input-group-addon glyphicon glyphicon-user"></span></span>
-          <input type="text"   class="form-control input-lg" name="user_name" id="user_name" ng-model="user_name"  placeHolder="Business Name" required data-ng-model-options="{debounce: 500}"/>
-           
-        </div>
-  
-      </div>
-    
-        <div class="form-group has-feedback" data-ng-class="signupForm.service_name.$pristine ? '' : (signupForm.service_name.$valid? 'has-success' : 'has-error')">
-        <label for="service_name" class="sr-only"></label>
-    
-            <select class="form-control input-lg" name="service_name" ng-model="service_name" ng-options="service_name.name for service_name in service_list" required></select>
-     
-  
-      </div>
-        
-        
-      <div class="form-group has-feedback" data-ng-class="signupForm.email.$pristine ? '' : (signupForm.email.$valid? 'has-success' : 'has-error')">
-        <label for="email" class="sr-only"></label>
-        <div class="input-group">
-            <span class="input-group-addon">@</span>
-          <input type="email"  class="form-control input-lg" name="email" id="email" ng-model="email"  placeHolder="Email Address" required data-ng-model-options="{debounce: 500}"/>
-           
-        </div>
-        <span class="glyphicon form-control-feedback" aria-hidden="true" data-ng-class="signupForm.email.$pristine ? '' : (signupForm.email.$valid? 'glyphicon-ok' : 'glyphicon-remove')"></span>
-        <div data-ng-messages="signupForm.email.$error" data-ng-if="signupForm.email.$dirty" role="alert" class="text-danger">
-          <div data-ng-message="email">Please enter valid email address</div>
-        </div>
-      </div>
-    
-    
-    
-      <div class="form-group has-feedback" data-ng-class="signupForm.passwd.$pristine ? '' : (signupForm.passwd.$valid? 'has-success' : 'has-error')">
-          <div class="input-group">
-            <span class="input-group-addon glyphicon glyphicon glyphicon-lock"></span>
-        <input type="password" class="form-control input-lg" name="passwd" id="passwd" ng-model="passwd"
-  placeHolder="Create Password" ng-pattern="/.*(?=.{8,})(?=.*[a-zA-Z0-9])(?=.*[!@#$%^&*]).*$/" required data-ng-model-options="{debounce: 500}"/>
-          </div>
-		<span class="glyphicon form-control-feedback" aria-hidden="true" data-ng-class="signupForm.passwd.$pristine ? '' : (signupForm.passwd.$valid? 'glyphicon-ok' : 'glyphicon-remove')"></span>
-		<div data-ng-messages="signupForm.passwd.$error" data-ng-if="signupForm.passwd.$dirty" role="alert" class="text-danger">
-          <div data-ng-message="pattern">Invalid password. Must be at least 8 characters and include a special character.</div>
-        </div>
-      </div>
-      <div class="form-group" >
-       <div class="input-group">
-        <span class="input-group-addon">+91</span>
-        <input type="tel" class="form-control input-lg" name="mobile" id="mobile" ng-model="mobile" data-ng-pattern="/^[0-9]+$/" ng-minlength="10" ng-maxlength="10" placeHolder="Mobile Number" required data-ng-model-options="{debounce: 500}"/>
-       </div>
-
-		<div data-ng-messages="signupForm.mobile.$error" data-ng-if="signupForm.mobile.$dirty" role="alert" class="text-danger">
-          <div data-ng-message="pattern">Please enter a valid mobile number.</div>
-		  <div data-ng-message="minlength, maxlength">Please enter a valid mobile number.</div>
+            <span class="input-group-addon">U</span></span>
+            <input type="text"   class="form-control input-lg" name="user_name" id="user_name" ng-model="user_name"  placeHolder="Business Name" required data-ng-model-options="{debounce: 500}"/>
         </div>
       </div>
       <div class="form-group">
-        <div data-vc-recaptcha data-key="recaptchaKey" data-theme="light" data-on-create="setWidgetId(widgetId)"></div>
+        <label for="service_name" class="sr-only"></label>
+              <select class="form-control input-lg" name="service_name" ng-model="service_name" ng-options="service_name.name for service_name in service_list" required></select>
       </div>
+      <div class="form-group has-feedback" data-ng-class="signupForm.email.$pristine ? '' : (signupForm.email.$valid? 'has-success' : 'has-error')">
+        <label for="email" class="sr-only"></label>
+        <div class="input-group">
+          <span class="input-group-addon">@</span>
+          <input type="email"   class="form-control input-lg" name="email" id="email" ng-model="email"  placeHolder="Email Address" required data-ng-model-options="{debounce: 500}"/>
+        </div>
+        <span class="glyphicon form-control-feedback" aria-hidden="true" data-ng-class="signupForm.email.$pristine ? '' : (signupForm.email.$valid? 'glyphicon-ok' : 'glyphicon-remove')"></span>
+        <div data-ng-messages="signupForm.email.$error" data-ng-if="signupForm.email.$invalid && signupForm.email.$dirty" role="alert" class="text-danger">
+          <div data-ng-message="email">{{errEmail}}</div>
+        </div>
+      </div>
+
+      <div class="form-group has-feedback" data-ng-class="signupForm.passwd.$pristine ? '' : (signupForm.passwd.$valid? 'has-success' : 'has-error')">
+        <input type="password" class="form-control input-lg" name="passwd" id="passwd" ng-model="passwd"
+  placeHolder="Create Password"  ng-minlength="6" required data-ng-model-options="{debounce: 500}"/>
+
+		    <span class="glyphicon form-control-feedback" aria-hidden="true" data-ng-class="signupForm.passwd.$pristine ? '' : (signupForm.passwd.$valid? 'glyphicon-ok' : 'glyphicon-remove')"></span>
+		    <div data-ng-messages="signupForm.passwd.$error" data-ng-if="signupForm.passwd.$invalid && signupForm.passwd.$dirty" role="alert" class="text-danger">
+          <div data-ng-message="">{{errPwd}}</div>
+        </div>
+    </div>
+
+    <div class="form-group has-feedback" data-ng-class="signupForm.mobile.$pristine ? '' : (signupForm.mobile.$valid? 'has-success' : 'has-error')">
+      <label for="mobile" class="sr-only"></label>
+      <div class="input-group">
+        <span class="input-group-addon">+91</span>
+        <input type="tel" class="form-control input-lg" name="mobile" id="mobile" ng-model="mobile"  data-ng-pattern="/^[0-9]+$/" ng-maxlength="10" ng-minlength="10" placeHolder="Mobile Number" required data-ng-model-options="{debounce: 500}"/>
+      </div>
+      <span class="glyphicon form-control-feedback" aria-hidden="true" data-ng-class="signupForm.mobile.$pristine ? '' : (signupForm.mobile.$valid? 'glyphicon-ok' : 'glyphicon-remove')"></span>
+      <div data-ng-messages="signupForm.mobile.$error" data-ng-if="signupForm.mobile.$invalid && signupForm.mobile.$dirty" role="alert" class="text-danger">
+        <div data-ng-message="maxlength, minlength, pattern">{{errPhone}}</div>
+      </div>
+    </div>
+
+
       <div class="row">
         <div class="col-sm-offset-1 col-sm-10 col-lg-offset-2 col-lg-8">
           <button class="btn btn-primary btn-lg btn-block" type="submit" data-ng-disabled="signupForm.$invalid">Create Account</button>
@@ -82,10 +77,8 @@
       </div>
     </form>
     <br><br>
-    
-    <p class="text-center sw-light">By signing up you agree to our <a href="#/terms" class="btn-link" target="_blank"><strong>Terms of Use</strong></a><br>and <a href="#/privacy" class="btn-link" target="_blank"><strong>Privacy Policy</strong></a></p>
- 
-    </div>
-</div>
-</div>
 
+    <p class="text-center sw-light">By signing up you agree to our <a href="#/terms" class="btn-link" target="_blank"><strong>Terms of <br class="hidden-sm"> Use</strong></a> and <a href="#/privacy" class="btn-link" target="_blank"><strong>Privacy Policy</strong></a></p>
+  </div>
+</div>
+</div>

@@ -94,25 +94,17 @@ angular.module('freeminderApp')
         }
 
         // not in cache
-        /*
-        var promise = Parse.query({object: 'users', api: 'me'}).$promise;
-        promise.then(function(profileInfo) {
-          if (!profileInfo) {
-            deferred.reject(profileInfo);
-            return;
-          }
+
           // map few fields to be compatible with user service
-          profileInfo.id = profileInfo.objectId;
-          profileInfo.mobileVerified = profileInfo.isMobileVerified;
+          var profileInfo = {};
+          profileInfo.id = user.oID;
+          profileInfo.mobileVerified = user.isMobileVerified;
           cache.put(user.oID + 'ProfileInfo', profileInfo);
           profileInfo = completeProfile ? profileInfo :transformJSON(profileInfo);
           deferred.resolve(profileInfo);
-        }, function(error) {
-          deferred.reject(error);
-        }); */
 
-        return deferred.promise; 
-      }; 
+          return deferred.promise;
+      };
 
       var _updateProfileInfo = function(pInfo) {
 
@@ -155,14 +147,14 @@ angular.module('freeminderApp')
 
       };
 
-     
+
 
       return {
         getProfileInfo : function() { return _getProfileInfo(false, false); },
         getCompleteProfile : function() { return _getProfileInfo(true, true); },
         updateProfileInfo : _updateProfileInfo,
         changePassword : _changePassword
-       
+
       };
 
 

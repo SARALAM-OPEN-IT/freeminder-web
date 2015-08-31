@@ -3,7 +3,7 @@
 describe('Controller: ProfileCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('freeminderApp'));
+  beforeEach(module('swappableWebApp'));
 
   var ProfileCtrl,
     scope;
@@ -13,11 +13,10 @@ describe('Controller: ProfileCtrl', function () {
     scope = $rootScope.$new();
     ProfileCtrl = $controller('ProfileCtrl', {
       $scope: scope
-      // place here mocked dependencies
     });
   }));
 
   it('should attach a list of awesomeThings to the scope', function () {
-    expect(ProfileCtrl.awesomeThings.length).toBe(3);
+    expect(scope.awesomeThings.length).toBe(3);
   });
 });
